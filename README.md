@@ -6,8 +6,8 @@ See [KCFpy](https://github.com/uoip/KCFpy)
 
 ### Use
 ```shell
-git clone https://github.com/uoip/KCFnb.git
-cd KCFnb
+https://github.com/profmcdan/kcf-tracker.git
+cd kcf-tracker
 python fhog_utils.py
 ```
 then
