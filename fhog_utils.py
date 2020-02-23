@@ -13,14 +13,14 @@ cc = CC('fhog_utils')
 @cc.export('func1', '(f4[:,:,:], f4[:,:,:], f4[:], f4[:], f4[:,:], i8[:,:,:], i8,i8,i8)')
 def func1(dx, dy, boundary_x, boundary_y, r, alfa, height, width, numChannels):
 
-    for j in xrange(1, height-1):
-        for i in xrange(1, width-1):
+    for j in range(1, height-1):
+        for i in range(1, width-1):
             c = 0
             x = dx[j, i, c]
             y = dy[j, i, c]
             r[j, i] = math.sqrt(x*x + y*y)
 
-            for ch in xrange(1, numChannels):
+            for ch in range(1, numChannels):
                 tx = dx[j, i, ch]
                 ty = dy[j, i, ch]
                 magnitude = math.sqrt(tx*tx + ty*ty)
@@ -33,7 +33,7 @@ def func1(dx, dy, boundary_x, boundary_y, r, alfa, height, width, numChannels):
             mmax = boundary_x[0]*x + boundary_y[0]*y
             maxi = 0
 
-            for kk in xrange(0, NUM_SECTOR):
+            for kk in range(0, NUM_SECTOR):
                 dotProd = boundary_x[kk]*x + boundary_y[kk]*y
                 if(dotProd > mmax):
                     mmax = dotProd
@@ -49,10 +49,10 @@ def func1(dx, dy, boundary_x, boundary_y, r, alfa, height, width, numChannels):
 @cc.export('func2', '(f4[:], f4[:], f4[:], f4[:,:], i8[:,:,:], i8[:], f4[:,:], i8,i8,i8,i8,i8,i8,i8)')
 def func2(mapp, boundary_x, boundary_y, r, alfa, nearest, w, k, height, width, sizeX, sizeY, p, stringSize):
     
-    for i in xrange(sizeY):
-        for j in xrange(sizeX):
-            for ii in xrange(k):
-                for jj in xrange(k):
+    for i in range(sizeY):
+        for j in range(sizeX):
+            for ii in range(k):
+                for jj in range(k):
                     if((i * k + ii > 0) and (i * k + ii < height - 1) and (j * k + jj > 0) and (j * k + jj < width  - 1)):
                         mapp[i*stringSize + j*p + alfa[k*i+ii,j*k+jj,0]] +=  r[k*i+ii,j*k+jj] * w[ii,0] * w[jj,0]
                         mapp[i*stringSize + j*p + alfa[k*i+ii,j*k+jj,1] + NUM_SECTOR] +=  r[k*i+ii,j*k+jj] * w[ii,0] * w[jj,0]
@@ -70,8 +70,8 @@ def func2(mapp, boundary_x, boundary_y, r, alfa, nearest, w, k, height, width, s
 @cc.export('func3', '(f4[:], f4[:], f4[:], i8,i8,i8,i8,i8)')
 def func3(newData, partOfNorm, mappmap, sizeX, sizeY, p, xp, pp):
 	
-	for i in xrange(1, sizeY+1):
-		for j in xrange(1, sizeX+1):
+	for i in range(1, sizeY+1):
+		for j in range(1, sizeX+1):
 			pos1 = i * (sizeX+2) * xp + j * xp
 			pos2 = (i-1) * sizeX * pp + (j-1) * pp
 
@@ -107,16 +107,16 @@ def func3(newData, partOfNorm, mappmap, sizeX, sizeY, p, xp, pp):
 @cc.export('func4', '(f4[:], f4[:], i8,i8,i8,i8,i8,i8,f8,f8)')
 def func4(newData, mappmap, p, sizeX, sizeY, pp, yp, xp, nx, ny):
 	
-	for i in xrange(sizeY):
-		for j in xrange(sizeX):
+	for i in range(sizeY):
+		for j in range(sizeX):
 			pos1 = (i*sizeX + j) * p
 			pos2 = (i*sizeX + j) * pp
 
-			for jj in xrange(2 * xp):  # 2*9
+			for jj in range(2 * xp):  # 2*9
 				newData[pos2 + jj] = np.sum(mappmap[pos1 + yp*xp + jj : pos1 + 3*yp*xp + jj : 2*xp]) * ny
-			for jj in xrange(xp):  # 9
+			for jj in range(xp):  # 9
 				newData[pos2 + 2*xp + jj] = np.sum(mappmap[pos1 + jj : pos1 + jj + yp*xp : xp]) * ny
-			for ii in xrange(yp):  # 4
+			for ii in range(yp):  # 4
 				newData[pos2 + 3*xp + ii] = np.sum(mappmap[pos1 + yp*xp + ii*xp*2 : pos1 + yp*xp + ii*xp*2 + 2*xp]) * nx
 				
 	
